@@ -7,6 +7,7 @@ import main.entity.request.PersonRequest;
 import main.exception.DiagnosisNotExistsException;
 import main.exception.PersonNotExistsException;
 import main.exception.WardNotExistsException;
+import org.springframework.data.util.Pair;
 
 public interface PersonService {
 
@@ -14,7 +15,7 @@ public interface PersonService {
     List<Person> listPeople();
     List<Person> listPeopleWithDiagnosis(long diagnosisId);
     Person findPerson(long id) throws PersonNotExistsException;
-    Person addPerson(PersonRequest personRequest) throws WardNotExistsException, DiagnosisNotExistsException;
+    Pair<Person, Boolean> addPerson(PersonRequest personRequest) throws WardNotExistsException, DiagnosisNotExistsException;
     boolean updatePerson(long id, PersonRequest personRequest)
             throws PersonNotExistsException, WardNotExistsException, DiagnosisNotExistsException;
     boolean deletePerson(long id);

@@ -41,6 +41,12 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     }
 
     @Override
+    public Diagnosis findDiagnosis(String name) throws DiagnosisNotExistsException {
+        Optional<Diagnosis> optionalDiagnosis = diagnosisRepository.findByName(name);
+        return optionalDiagnosis.orElseThrow(() -> new DiagnosisNotExistsException("Диагноз не найден"));
+    }
+
+    @Override
     public Pair<Diagnosis, Boolean> addDiagnosis(DiagnosisRequest diagnosisRequest) {
         Optional<Diagnosis> optionalDiagnosis = diagnosisRepository.findByName(diagnosisRequest.getName());
         if (optionalDiagnosis.isPresent()) {

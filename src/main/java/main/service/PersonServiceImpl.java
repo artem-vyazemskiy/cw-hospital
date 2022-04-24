@@ -5,6 +5,7 @@ import java.util.*;
 import main.entity.Person;
 import main.entity.component.FullName;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import main.entity.Diagnosis;
@@ -49,12 +50,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person addPerson(PersonRequest personRequest) throws WardNotExistsException, DiagnosisNotExistsException {
+    public Pair<Person, Boolean> addPerson(PersonRequest personRequest) throws WardNotExistsException, DiagnosisNotExistsException {
         Person person = new Person();
         person.setFullName(personRequest.getFullName());
         person.setWard(wardService.findWard(personRequest.getWardId()));
         person.setDiagnosis(diagnosisService.findDiagnosis(personRequest.getDiagnosisId()));
-        return personRepository.save(person);
+        return Pair.of(personRepository.save(person), true);
     }
 
     @Override

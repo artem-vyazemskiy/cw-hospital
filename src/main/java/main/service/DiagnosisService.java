@@ -12,6 +12,7 @@ public interface DiagnosisService {
     boolean exists(long id);
     List<Diagnosis> listDiagnosis();
     Diagnosis findDiagnosis(long id) throws DiagnosisNotExistsException;
+    Diagnosis findDiagnosis(String name) throws DiagnosisNotExistsException;
     Pair<Diagnosis, Boolean> addDiagnosis(DiagnosisRequest diagnosisRequest);
     boolean deleteDiagnosis(long id) throws DiagnosisIsUsedException;
 
