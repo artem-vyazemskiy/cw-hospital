@@ -18,7 +18,7 @@ public class Ward {
     private int maxCount;
 
     @OneToMany(mappedBy = "ward", fetch = FetchType.EAGER)
-    private List<People> peoples;
+    private List<Person> people;
 
     public Ward() {
     }
@@ -57,8 +57,8 @@ public class Ward {
         this.maxCount = maxCount;
     }
 
-    public List<People> getPeoples() {
-        return this.peoples;
+    public List<Person> getPeople() {
+        return this.people;
     }
 
 }

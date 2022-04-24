@@ -15,7 +15,7 @@ public class Diagnosis {
     private String name;
 
     @OneToMany(mappedBy = "diagnosis", fetch = FetchType.EAGER)
-    private List<People> peoples;
+    private List<Person> people;
 
     public Diagnosis() {
     }
@@ -44,8 +44,8 @@ public class Diagnosis {
         this.name = name;
     }
 
-    public List<People> getPeoples() {
-        return this.peoples;
+    public List<Person> getPeople() {
+        return this.people;
     }
 
 }

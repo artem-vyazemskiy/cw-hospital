@@ -1,14 +1,16 @@
 package main.entity.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import main.entity.component.FullName;
 
-public class PeopleRequest {
+public class PersonRequest {
 
     private FullName fullName;
     private long wardId;
     private long diagnosisId;
 
-    public PeopleRequest(FullName fullName, long wardId, long diagnosisId) {
+    @JsonCreator
+    public PersonRequest(FullName fullName, long wardId, long diagnosisId) {
         this.fullName = fullName;
         this.wardId = wardId;
         this.diagnosisId = diagnosisId;

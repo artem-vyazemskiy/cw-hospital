@@ -1,11 +1,13 @@
 package main.entity;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import main.entity.component.FullName;
 
 @Entity
 @Table(name = "people")
-public class People {
+public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +24,10 @@ public class People {
     @JoinColumn(name = "diagnosis_id", nullable = false)
     private Diagnosis diagnosis;
 
-    public People() {
+    public Person() {
     }
 
-    public People(FullName fullName, Ward ward, Diagnosis diagnosis) {
+    public Person(FullName fullName, Ward ward, Diagnosis diagnosis) {
         this.fullName = fullName;
         this.ward = ward;
         this.diagnosis = diagnosis;
@@ -33,7 +35,7 @@ public class People {
 
     @Override
     public String toString() {
-        return "People{" +
+        return "Person{" +
                 "id=" + this.id +
                 ", fullName=" + this.fullName +
                 ", ward=" + this.ward +

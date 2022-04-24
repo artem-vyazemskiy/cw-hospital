@@ -6,14 +6,14 @@ import java.util.Optional;
 
 import main.exception.DiagnosisIsUsedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import main.entity.Diagnosis;
-import main.entity.People;
 import main.entity.request.DiagnosisRequest;
 import main.exception.DiagnosisNotExistsException;
 import main.repository.DiagnosisRepository;
-import main.repository.PeopleRepository;
+import main.repository.PersonRepository;
 
 @Service
 public class DiagnosisServiceImpl implements DiagnosisService {
@@ -22,7 +22,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     DiagnosisRepository diagnosisRepository;
 
     @Autowired
-    PeopleRepository peopleRepository;
+    PersonRepository personRepository;
 
     @Override
     public boolean exists(long id) {
@@ -41,22 +41,28 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     }
 
     @Override
-    public Diagnosis addDiagnosis(DiagnosisRequest diagnosisRequest) {
+    public Pair<Diagnosis, Boolean> addDiagnosis(DiagnosisRequest diagnosisRequest) {
         Optional<Diagnosis> optionalDiagnosis = diagnosisRepository.findByName(diagnosisRequest.getName());
         if (optionalDiagnosis.isPresent()) {
-            return optionalDiagnosis.get();
+            return Pair.of(optionalDiagnosis.get(), false);
         }
         Diagnosis diagnosis = new Diagnosis(diagnosisRequest.getName());
-        return diagnosisRepository.save(diagnosis);
+        return Pair.of(diagnosisRepository.save(diagnosis), true);
     }
 
     @Override
-    public void deleteDiagnosis(long id) throws DiagnosisNotExistsException, DiagnosisIsUsedException {
-        Diagnosis diagnosis = this.findDiagnosis(id);
-        if (diagnosis.getPeoples().size() != 0) {
+    public boolean deleteDiagnosis(long id) throws DiagnosisIsUsedException {
+        Diagnosis diagnosis = null;
+        try {
+            diagnosis = this.findDiagnosis(id);
+        } catch (DiagnosisNotExistsException e) {
+            return false;
+        }
+        if (diagnosis.getPeople().size() != 0) {
             throw new DiagnosisIsUsedException("Невозможно удалить диагноз, назначенный какому-либо пациенту");
         }
         diagnosisRepository.deleteById(id);
+        return true;
     }
 
 }

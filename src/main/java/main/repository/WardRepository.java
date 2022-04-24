@@ -16,7 +16,7 @@ public interface WardRepository extends CrudRepository<Ward, Long> {
 
     Optional<Ward> findByName(String name);
 
-    @Query("select distinct ward from People people join people.ward ward join people.diagnosis diagnosis " +
+    @Query("select distinct ward from Person person join person.ward ward join person.diagnosis diagnosis " +
             "where diagnosis.id=:diagnosisId")
     List<Ward> findByDiagnosisId(long diagnosisId);
 

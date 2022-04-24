@@ -1,10 +1,13 @@
 package main.entity.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public class WardRequest {
 
     private String name;
     private int maxCount;
 
+    @JsonCreator
     public WardRequest(String name, int maxCount) {
         this.name = name;
         this.maxCount = maxCount;

@@ -2,19 +2,16 @@ package main.service;
 
 import java.util.*;
 
-import javassist.NotFoundException;
-import main.entity.Diagnosis;
-import main.exception.DiagnosisIsUsedException;
 import main.exception.WardIsUsedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import main.entity.Ward;
-import main.entity.People;
+import main.entity.Person;
 import main.entity.request.WardRequest;
 import main.exception.WardAlreadyExistsException;
 import main.exception.WardNotExistsException;
-import main.repository.PeopleRepository;
 import main.repository.WardRepository;
 
 @Service
@@ -37,7 +34,7 @@ public class WardServiceImpl implements WardService {
     public List<Ward> listNotFullWards() {
         List<Ward> notFullWards = new ArrayList<>();
         for (Ward ward : wardRepository.findAll()) {
-            if (ward.getPeoples().size() < ward.getMaxCount()) {
+            if (ward.getPeople().size() < ward.getMaxCount()) {
                 notFullWards.add(ward);
             }
         }
@@ -64,7 +61,7 @@ public class WardServiceImpl implements WardService {
     public List<Ward> listWardsWithDifferentDiagnoses() {
         List<Ward> wardsWithDifferentDiagnosis = new ArrayList<>();
         for (Ward ward : this.listWards()) {
-            if (ward.getPeoples().size() == 0) {
+            if (ward.getPeople().size() == 0) {
                 continue;
             }
             if (!this.isWardWithOneDiagnosis(ward)) {
@@ -87,49 +84,60 @@ public class WardServiceImpl implements WardService {
     }
 
     @Override
-    public Ward addWard(WardRequest wardRequest) throws WardAlreadyExistsException {
+    public Pair<Ward, Boolean> addWard(WardRequest wardRequest) throws WardAlreadyExistsException {
         Optional<Ward> optionalWard = wardRepository.findByName(wardRequest.getName());
         if (optionalWard.isPresent()) {
             if (optionalWard.get().getMaxCount() == wardRequest.getMaxCount()) {
-                return optionalWard.get();
+                return Pair.of(optionalWard.get(), false);
             }
             throw new WardAlreadyExistsException("Палата с таким названием уже существует и ее вместимость отличается");
         }
         Ward ward = new Ward(wardRequest.getName(), wardRequest.getMaxCount());
-        return wardRepository.save(ward);
+        return Pair.of(wardRepository.save(ward), true);
     }
 
     @Override
-    public void updateWard(Ward ward, WardRequest wardRequest) {
+    public boolean updateWard(long id, WardRequest wardRequest) throws WardNotExistsException {
+        Ward ward = this.findWard(id);
+        boolean updated = false;
         if (!ward.getName().equals(wardRequest.getName())) {
             ward.setName(wardRequest.getName());
             wardRepository.updateName(ward.getId(), wardRequest.getName());
+            updated = true;
         }
         if (ward.getMaxCount() != wardRequest.getMaxCount()) {
             ward.setMaxCount(wardRequest.getMaxCount());
             wardRepository.updateMaxCount(ward.getId(), wardRequest.getMaxCount());
+            updated = true;
         }
+        return updated;
     }
 
     @Override
-    public void deleteWard(long id) throws WardNotExistsException, WardIsUsedException {
-        Ward ward = this.findWard(id);
-        if (ward.getPeoples().size() != 0) {
+    public boolean deleteWard(long id) throws WardIsUsedException {
+        Ward ward = null;
+        try {
+            ward = this.findWard(id);
+        } catch (WardNotExistsException e) {
+            return false;
+        }
+        if (ward.getPeople().size() != 0) {
             throw new WardIsUsedException("Невозможно удалить палату, назначенную какому-либо пациенту");
         }
         wardRepository.deleteById(id);
+        return true;
     }
 
     private boolean isWardWithOneDiagnosis(Ward ward) {
-        List<People> peoples = ward.getPeoples();
-        int peoplesSize = peoples.size();
-        if (peoplesSize == 0) {
+        List<Person> people = ward.getPeople();
+        int peopleSize = people.size();
+        if (peopleSize == 0) {
             return false;
         }
-        long diagnosisId = peoples.get(0).getDiagnosis().getId();
+        long diagnosisId = people.get(0).getDiagnosis().getId();
         boolean oneDiagnosis = true;
-        for (int i = 1; i < peoplesSize; i++) {
-            if (diagnosisId != peoples.get(i).getDiagnosis().getId()) {
+        for (int i = 1; i < peopleSize; i++) {
+            if (diagnosisId != people.get(i).getDiagnosis().getId()) {
                 oneDiagnosis = false;
                 break;
             }

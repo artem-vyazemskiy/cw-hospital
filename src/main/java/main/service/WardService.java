@@ -7,6 +7,8 @@ import main.entity.request.WardRequest;
 import main.exception.WardAlreadyExistsException;
 import main.exception.WardIsUsedException;
 import main.exception.WardNotExistsException;
+import org.springframework.data.util.Pair;
+
 
 public interface WardService {
 
@@ -18,8 +20,8 @@ public interface WardService {
     List<Ward> listWardsWithDifferentDiagnoses();
     Ward findWard(long id) throws WardNotExistsException;
     Ward findWard(String name) throws WardNotExistsException;
-    Ward addWard(WardRequest wardRequest) throws WardAlreadyExistsException;
-    void updateWard(Ward ward, WardRequest wardRequest);
-    void deleteWard(long id) throws WardNotExistsException, WardIsUsedException;
+    Pair<Ward, Boolean> addWard(WardRequest wardRequest) throws WardAlreadyExistsException;
+    boolean updateWard(long id, WardRequest wardRequest) throws WardNotExistsException;
+    boolean deleteWard(long id) throws WardIsUsedException;
 
 }
