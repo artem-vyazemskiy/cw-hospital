@@ -50,6 +50,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public List<Person> findByLastName(String lastName) {
+        return personRepository.findByFullName_LastName(lastName);
+    }
+
+    @Override
     public Pair<Person, Boolean> addPerson(PersonRequest personRequest) throws WardNotExistsException, DiagnosisNotExistsException {
         Person person = new Person();
         person.setFullName(personRequest.getFullName());

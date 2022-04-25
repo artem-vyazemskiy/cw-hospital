@@ -94,7 +94,9 @@ public class WardController {
     @GetMapping("/getWithDiagnosis")
     public String getWithDiagnosis(@RequestParam(value = "diagnosisId", required = true) long diagnosisId, Model model) {
         List<Ward> wards = wardService.listWardsWithDiagnosis(diagnosisId);
+        String message = "Палаты, в которых есть пациенты с диагнозом id=" + diagnosisId;
         model.addAttribute("wards", wards);
+        model.addAttribute("message", message);
         return "wards/wards";
     }
 
@@ -104,12 +106,13 @@ public class WardController {
     }
 
     @PostMapping("/add")
-    public String add(@RequestBody WardRequest wardRequest, Model model) {
+    public String add(WardRequest wardRequest, Model model) {
         try {
             Pair<Ward, Boolean> pair = wardService.addWard(wardRequest);
             return "redirect:/wards/" + pair.getFirst().getId();
         } catch (WardAlreadyExistsException e) {
-            return "wards/ward-already-exist";
+            model.addAttribute("message", e.getMessage());
+            return "message";
         }
     }
 
@@ -125,7 +128,7 @@ public class WardController {
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable("id") long id, @RequestBody WardRequest wardRequest) {
+    public String update(@PathVariable("id") long id, WardRequest wardRequest) {
         try {
             wardService.updateWard(id, wardRequest);
         } catch (WardNotExistsException e) {
@@ -145,7 +148,7 @@ public class WardController {
         } catch (WardIsUsedException e) {
             model.addAttribute("message", "Палата с id=" + id + " используется. Удаление невозможно.");
         }
-        return "wards/ward-delete-response";
+        return "message";
     }
 
 }

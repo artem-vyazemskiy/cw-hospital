@@ -87,7 +87,7 @@ public class DiagnosisController {
         } catch (DiagnosisIsUsedException e) {
             model.addAttribute("message", "Диагноз с id=" + id + " используется. Удаление невозможно.");
         }
-        return "diagnoses/diagnosis-delete-response";
+        return "message";
     }
 
 }

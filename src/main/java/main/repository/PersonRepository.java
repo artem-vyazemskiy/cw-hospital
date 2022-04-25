@@ -17,6 +17,7 @@ public interface PersonRepository extends CrudRepository<Person, Long> {
 
     List<Person> findByDiagnosisId(long diagnosisId);
     List<Person> findByWardId(long wardId);
+    List<Person> findByFullName_LastName(String fullName_lastName);
 
     @Transactional
     @Modifying

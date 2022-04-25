@@ -15,6 +15,7 @@ public interface PersonService {
     List<Person> listPeople();
     List<Person> listPeopleWithDiagnosis(long diagnosisId);
     Person findPerson(long id) throws PersonNotExistsException;
+    List<Person> findByLastName(String lastName);
     Pair<Person, Boolean> addPerson(PersonRequest personRequest) throws WardNotExistsException, DiagnosisNotExistsException;
     boolean updatePerson(long id, PersonRequest personRequest)
             throws PersonNotExistsException, WardNotExistsException, DiagnosisNotExistsException;
