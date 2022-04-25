@@ -25,19 +25,32 @@ public class DiagnosisController {
 
     @GetMapping("")
     public String getList(@RequestParam(value = "text", required = false) String text, Model model) {
-        List<Diagnosis> diagnoses = new ArrayList<>();
+        List<Diagnosis> diagnoses = null;
+        String message = "";
         if (text != null) {
+            diagnoses = new ArrayList<>();
             try {
                 long id = Long.parseLong(text);
-                diagnoses.add(diagnosisService.findDiagnosis(id));
-            } catch (NumberFormatException | DiagnosisNotExistsException ignored) {}
-            try {
-                diagnoses.add(diagnosisService.findDiagnosis(text));
-            } catch (DiagnosisNotExistsException ignored) {}
+                try {
+                    diagnoses.add(diagnosisService.findDiagnosis(id));
+                    message = "Результаты поиска по id=" + id;
+                } catch (DiagnosisNotExistsException e) {
+                    message = "Диагноза с id=" + id + " не найдено";
+                }
+            } catch (NumberFormatException e) {
+                try {
+                    diagnoses.add(diagnosisService.findDiagnosis(text));
+                    message = "Результаты поиска по имени " + text;
+                } catch (DiagnosisNotExistsException ex) {
+                    message = "Диагноза с именем " + text + " не найдено";
+                }
+            }
         } else {
             diagnoses = diagnosisService.listDiagnosis();
+            message = "Все диагнозы";
         }
         model.addAttribute("diagnoses", diagnoses);
+        model.addAttribute("message", message);
         return "diagnoses/diagnoses";
     }
 

@@ -29,32 +29,46 @@ public class WardController {
                           @RequestParam(value = "text", required = false) String text,
                           Model model) {
         List<Ward> wards = null;
+        String message = "";
         switch (filter) {
             case "all": {
                 wards = wardService.listWards();
+                message = "Все палаты";
                 break;
             }
             case "notFull": {
                 wards = wardService.listNotFullWards();
+                message = "Не заполненные палаты";
                 break;
             }
             case "withOneDiagnosis": {
                 wards = wardService.listWardsWithOneDiagnosis();
+                message = "Палаты с одним диагнозом";
                 break;
             }
             case "withDifferentDiagnoses": {
                 wards = wardService.listWardsWithDifferentDiagnoses();
+                message = "Палаты с разными диагнозами";
                 break;
             }
             case "search": {
                 wards = new ArrayList<>();
                 try {
                     long id = Long.parseLong(text);
-                    wards.add(wardService.findWard(id));
-                } catch (NumberFormatException | WardNotExistsException ignored) {}
-                try {
-                    wards.add(wardService.findWard(text));
-                } catch (WardNotExistsException ignored) {}
+                    try {
+                        wards.add(wardService.findWard(id));
+                        message = "Результаты поиска по id=" + id;
+                    } catch (WardNotExistsException e) {
+                        message = "Палаты с id=" + id + " не найдено";
+                    }
+                } catch (NumberFormatException e) {
+                    try {
+                        wards.add(wardService.findWard(text));
+                        message = "Результаты поиска по имени " + text;
+                    } catch (WardNotExistsException ex) {
+                        message = "Палаты с именем " + text + " не найдено";
+                    }
+                }
                 break;
             }
             default: {
@@ -62,6 +76,7 @@ public class WardController {
             }
         }
         model.addAttribute("wards", wards);
+        model.addAttribute("message", message);
         return "wards/wards";
     }
 
