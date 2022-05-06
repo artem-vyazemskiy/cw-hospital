@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <title>Вход</title>
+
+</head>
+<body>
+
+<header th:insert="components/header :: navigationPanel">
+</header>
+
+<main>
+    <h2>Вход</h2>
+
+    <form method="post" th:action="@{/auth/login}">
+        <input type="text" name="username" />
+        <input type="password" name="password" />
+        <button type="submit">Ок</button>
+    </form>
+
+    <div sec:authorize="isAuthenticated()">
+        <p>Текущий пользователь: <span sec:authentication="name"></span></p>
+    </div>
+
+</main>
+
+</body>
+</html>

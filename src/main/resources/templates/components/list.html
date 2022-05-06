@@ -1,0 +1,44 @@
+<table th:fragment="diagnoses-list">
+    <tr>
+        <th>Id</th>
+        <th>Название</th>
+    </tr>
+    <tr th:each="d : ${diagnoses}">
+        <td th:text="${d.id}"></td>
+        <td><a th:href="'/diagnoses/' + ${d.id}" th:text="${d.name}"></a></td>
+    </tr>
+</table>
+
+<table th:fragment="wards-list">
+    <tr>
+        <th>Id</th>
+        <th>Название</th>
+        <th>Вместимость</th>
+    </tr>
+    <tr th:each="w : ${wards}">
+        <td th:text="${w.id}"></td>
+        <td><a th:href="'/wards/' + ${w.id}" th:text="${w.name}"></a></td>
+        <td th:text="${w.maxCount}"></td>
+    </tr>
+</table>
+
+<div th:fragment="people-list">
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            <th>Название палаты</th>
+            <th>Диагноз</th>
+        </tr>
+        <tr th:each="p : ${people}">
+            <td><a th:href="'/people/' + ${p.id}" th:text="${p.id}"></a></td>
+            <td th:text="${p.fullName.lastName}"></td>
+            <td th:text="${p.fullName.firstName}"></td>
+            <td th:text="${p.fullName.fatherName}"></td>
+            <td><a th:href="'/wards/' + ${p.ward.id}" th:text="${p.ward.name}"></a></td>
+            <td><a th:href="'/diagnoses/' + ${p.diagnosis.id}" th:text="${p.diagnosis.name}"></a></td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <title>Изменение палаты</title>
+
+</head>
+<body>
+
+<header th:insert="components/header :: navigationPanel">
+</header>
+
+<main>
+    <h2>Изменение палаты</h2>
+    <form method="post" th:action="'/wards/' + ${ward.id} + '/update'">
+        <input type="text" name="name" th:value="${ward.name}" />
+        <input type="number" name="maxCount" th:value="${ward.maxCount}" />
+        <button type="submit">Готово</button>
+    </form>
+
+</main>
+
+</body>
+</html>

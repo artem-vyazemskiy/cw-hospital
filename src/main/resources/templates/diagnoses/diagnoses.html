@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <title>Диагнозы</title>
+
+</head>
+<body>
+
+<header th:insert="components/header :: navigationPanel">
+</header>
+
+<main>
+    <h2>Диагнозы</h2>
+
+    <p><a href="/diagnoses/add">Добавить диагноз</a></p>
+
+    <div th:insert="components/search-form :: diagnoses-search-form">
+    </div>
+
+    <h3 th:text="${message}"></h3>
+    <div th:unless="${diagnoses.empty}" th:insert="components/list :: diagnoses-list"></div>
+
+</main>
+
+</body>
+</html>

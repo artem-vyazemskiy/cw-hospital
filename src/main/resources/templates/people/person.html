@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <title>Пациент</title>
+
+</head>
+<body>
+
+<header th:insert="components/header :: navigationPanel">
+</header>
+
+<main>
+
+    <div>
+        <h2>Пациент</h2>
+        <p style="font-size: 26px" th:text="${person.fullName.lastName} + ' ' + ${person.fullName.firstName} + ' ' + ${person.fullName.fatherName}"></p>
+        <p><a th:href="'/people/' + ${person.id} + '/update'">Изменить</a> <a th:href="'/people/' + ${person.id} + '/delete'">Удалить</a></p>
+    </div>
+
+    <div>
+        <p>Палата: <a th:href="'/wards/' + ${person.ward.id}" th:text="${person.ward.name}"></a></p>
+        <p>Диагноз: <a th:href="'/diagnoses/' + ${person.diagnosis.id}" th:text="${person.diagnosis.name}"></a></p>
+    </div>
+
+</main>
+
+</body>
+</html>

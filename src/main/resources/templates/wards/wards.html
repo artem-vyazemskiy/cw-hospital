@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <title>Палаты</title>
+
+</head>
+<body>
+
+<header th:insert="components/header :: navigationPanel">
+</header>
+
+<main>
+    <h2>Палаты</h2>
+
+    <p><a href="/wards/add">Добавить палату</a></p>
+
+    <div th:insert="components/search-form :: wards-search-form">
+    </div>
+
+    <div>
+        <p>
+            <a href="/wards?filter=all">Все</a><br/>
+            <a href="/wards?filter=notFull">Не заполненные</a><br/>
+            <a href="/wards?filter=withOneDiagnosis">С одним диагнозом</a><br/>
+            <a href="/wards?filter=withDifferentDiagnoses">С разными диагнозами</a>
+        </p>
+    </div>
+
+    <h3 th:text="${message}"></h3>
+
+    <div th:unless="${wards.empty}" th:insert="components/list :: wards-list">
+    </div>
+
+</main>
+
+</body>
+</html>

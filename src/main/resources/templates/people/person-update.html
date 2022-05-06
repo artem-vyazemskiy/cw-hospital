@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <title>Изменение пациента</title>
+
+</head>
+<body>
+
+<header th:insert="components/header :: navigationPanel">
+</header>
+
+<main>
+    <h2>Изменение пациента</h2>
+    <form method="post" th:action="'/people/' + ${person.id} + '/update'">
+        <input type="text" name="fullName.lastName" th:value="${person.fullName.lastName}" />
+        <input type="text" name="fullName.firstName" th:value="${person.fullName.firstName}" />
+        <input type="text" name="fullName.fatherName" th:value="${person.fullName.fatherName}" />
+        <input type="number" name="wardId" th:value="${person.ward.id}" />
+        <input type="number" name="diagnosisId" th:value="${person.diagnosis.id}" />
+        <button type="submit">Готово</button>
+    </form>
+
+</main>
+
+</body>
+</html>

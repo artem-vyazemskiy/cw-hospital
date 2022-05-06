@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <title>Палата</title>
+
+</head>
+<body>
+
+<header th:insert="components/header :: navigationPanel">
+</header>
+
+<main>
+    <h2>Палата</h2>
+
+    <p style="font-size: 26px" th:text="${ward.name}"></p>
+
+    <p><a th:href="'/wards/' + ${ward.id} + '/update'">Изменить</a> <a th:href="'/wards/' + ${ward.id} + '/delete'">Удалить</a></p>
+
+    <p th:text="'Вместимость:' + ${ward.maxCount}"></p>
+
+    <h3>Пациенты:</h3>
+    <div th:with="people = ${ward.getPeople()}" th:insert="components/list :: people-list">
+    </div>
+
+</main>
+
+</body>
+</html>

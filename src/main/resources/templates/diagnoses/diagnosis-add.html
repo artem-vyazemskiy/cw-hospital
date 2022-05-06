@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <title>Добавление диагноза</title>
+
+</head>
+<body>
+
+<header th:insert="components/header :: navigationPanel">
+</header>
+
+<main>
+
+    <h2>Новый диагноз</h2>
+    <form method="post" action="/diagnoses/add">
+        <input type="text" name="name" placeholder="Название диагноза" />
+        <button type="submit">Готово</button>
+    </form>
+
+</main>
+
+</body>
+</html>

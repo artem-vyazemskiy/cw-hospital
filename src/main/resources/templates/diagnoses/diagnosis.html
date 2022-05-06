@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <title>Диагноз</title>
+</head>
+
+<body>
+
+<header th:insert="components/header :: navigationPanel">
+</header>
+
+<main>
+    <div>
+        <h2>Диагноз</h2>
+        <p style="font-size: 26px" th:text="${diagnosis.name}"></p>
+        <p><a th:href="'/diagnoses/' + ${diagnosis.id} + '/delete'">Удалить</a></p>
+        <p><a th:href="'/wards/getWithDiagnosis?diagnosisId=' + ${diagnosis.id}">Список палат, в которых есть этот диагноз</a></p>
+    </div>
+
+    <h3>Пациенты:</h3>
+    <div th:with="people = ${diagnosis.getPeople()}" th:insert="components/list :: people-list">
+    </div>
+
+</main>
+
+</body>
+</html>

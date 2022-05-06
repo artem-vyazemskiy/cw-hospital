@@ -1,0 +1,15 @@
+<form method="get" action="/diagnoses" th:fragment="diagnoses-search-form">
+    <input type="text" name="text" placeholder="Поиск по названию или id" />
+    <button type="submit">Ок</button>
+</form>
+
+<form method="get" action="/people" th:fragment="people-search-form">
+    <input type="text" name="text" placeholder="Поиск по фамилии или id" />
+    <button type="submit">Ок</button>
+</form>
+
+<form method="get" action="/wards" th:fragment="wards-search-form">
+    <input type="hidden" name="filter" value="search">
+    <input type="text" name="text" placeholder="Поиск по названию или id" />
+    <button type="submit">Ок</button>
+</form>
