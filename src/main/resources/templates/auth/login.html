@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
@@ -19,10 +19,6 @@
         <input type="password" name="password" />
         <button type="submit">Ок</button>
     </form>
-
-    <div sec:authorize="isAuthenticated()">
-        <p>Текущий пользователь: <span sec:authentication="name"></span></p>
-    </div>
 
 </main>
 

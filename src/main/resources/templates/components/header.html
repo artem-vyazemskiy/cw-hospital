@@ -1,8 +1,13 @@
-<nav th:fragment="navigationPanel">
+<nav th:fragment="navigationPanel" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <ul>
         <li><a href="/people">Пациенты</a></li>
         <li><a href="/wards?filter=all">Палаты</a></li>
         <li><a href="/diagnoses">Диагнозы</a></li>
-        <li style="float: right"><a href="/auth/login">Войти</a></li>
+        <li style="float: right" sec:authorize="!isAuthenticated()">
+            <a href="/auth/login">Войти</a>
+        </li>
+        <li style="float: right" sec:authorize="isAuthenticated()">
+            <a href="/auth/logout"><span sec:authentication="name"></span> - Выйти</a>
+        </li>
     </ul>
 </nav>

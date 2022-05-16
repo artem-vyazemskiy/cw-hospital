@@ -61,7 +61,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                     .loginPage("/auth/login")
                     .defaultSuccessUrl("/people", true)
-                    .permitAll();
+                    .permitAll()
+                .and()
+                .logout()
+                    .logoutUrl("/auth/logout");
         // @formatter:on
     }
 
@@ -72,13 +75,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("user").password(encoder.encode("user-password")).roles("USER")
                 .and()
                 .withUser("admin").password(encoder.encode("admin-password")).roles("ADMIN");
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-                .ignoring()
-                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/img/**", "/icon/**");
     }
 
 }
