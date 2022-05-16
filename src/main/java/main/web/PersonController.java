@@ -4,6 +4,7 @@ import main.entity.Person;
 import main.entity.request.PersonRequest;
 import main.exception.DiagnosisNotExistsException;
 import main.exception.PersonNotExistsException;
+import main.exception.WardIsFullException;
 import main.exception.WardNotExistsException;
 import main.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,12 +79,15 @@ public class PersonController {
     }
 
     @PostMapping("/add")
-    public String add(PersonRequest personRequest) {
+    public String add(PersonRequest personRequest, Model model) {
         Pair<Person, Boolean> pair;
         try {
             pair = personService.addPerson(personRequest);
         } catch (WardNotExistsException | DiagnosisNotExistsException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (WardIsFullException e) {
+            model.addAttribute("message", e.getMessage());
+            return "message";
         }
         return "redirect:/people/" + pair.getFirst().getId();
     }
@@ -100,11 +104,14 @@ public class PersonController {
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable("id") long id, PersonRequest personRequest) {
+    public String update(@PathVariable("id") long id, PersonRequest personRequest, Model model) {
         try {
             personService.updatePerson(id, personRequest);
         } catch (PersonNotExistsException | WardNotExistsException | DiagnosisNotExistsException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (WardIsFullException e) {
+            model.addAttribute("message", e.getMessage());
+            return "message";
         }
         return "redirect:/people/" + id;
     }

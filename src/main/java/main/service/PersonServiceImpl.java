@@ -4,6 +4,7 @@ import java.util.*;
 
 import main.entity.Person;
 import main.entity.component.FullName;
+import main.exception.WardIsFullException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -55,17 +56,22 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Pair<Person, Boolean> addPerson(PersonRequest personRequest) throws WardNotExistsException, DiagnosisNotExistsException {
+    public Pair<Person, Boolean> addPerson(PersonRequest personRequest)
+            throws WardNotExistsException, DiagnosisNotExistsException, WardIsFullException {
+        Ward ward = wardService.findWard(personRequest.getWardId());
+        if (ward.getPeople().size() == ward.getMaxCount()) {
+            throw new WardIsFullException("Палата заполнена");
+        }
         Person person = new Person();
         person.setFullName(personRequest.getFullName());
-        person.setWard(wardService.findWard(personRequest.getWardId()));
+        person.setWard(ward);
         person.setDiagnosis(diagnosisService.findDiagnosis(personRequest.getDiagnosisId()));
         return Pair.of(personRepository.save(person), true);
     }
 
     @Override
     public boolean updatePerson(long id, PersonRequest personRequest)
-            throws PersonNotExistsException, WardNotExistsException, DiagnosisNotExistsException {
+            throws PersonNotExistsException, WardNotExistsException, DiagnosisNotExistsException, WardIsFullException {
         Person person = this.findPerson(id);
         boolean updated = false;
         if (!person.getFullName().equals(personRequest.getFullName())) {
@@ -76,6 +82,9 @@ public class PersonServiceImpl implements PersonService {
         }
         if (person.getWard().getId() != personRequest.getWardId()) {
             Ward ward = wardService.findWard(personRequest.getWardId());
+            if (ward.getPeople().size() == ward.getMaxCount()) {
+                throw new WardIsFullException("Палата заполнена");
+            }
             personRepository.updateWard(person.getId(), ward);
             updated = true;
         }

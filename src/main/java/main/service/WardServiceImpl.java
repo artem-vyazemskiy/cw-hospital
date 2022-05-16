@@ -2,6 +2,7 @@ package main.service;
 
 import java.util.*;
 
+import main.exception.WardIncorrectMaxCountException;
 import main.exception.WardIsUsedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -97,15 +98,22 @@ public class WardServiceImpl implements WardService {
     }
 
     @Override
-    public boolean updateWard(long id, WardRequest wardRequest) throws WardNotExistsException {
+    public boolean updateWard(long id, WardRequest wardRequest)
+            throws WardNotExistsException, WardAlreadyExistsException, WardIncorrectMaxCountException {
         Ward ward = this.findWard(id);
         boolean updated = false;
         if (!ward.getName().equals(wardRequest.getName())) {
+            if (wardRepository.existsByName(wardRequest.getName())) {
+                throw new WardAlreadyExistsException("Палата с таким именем уже существует");
+            }
             ward.setName(wardRequest.getName());
             wardRepository.updateName(ward.getId(), wardRequest.getName());
             updated = true;
         }
         if (ward.getMaxCount() != wardRequest.getMaxCount()) {
+            if (ward.getPeople().size() > wardRequest.getMaxCount()) {
+                throw new WardIncorrectMaxCountException("Новая вместимость меньше, чем текущее кол-во пациентов в палате");
+            }
             ward.setMaxCount(wardRequest.getMaxCount());
             wardRepository.updateMaxCount(ward.getId(), wardRequest.getMaxCount());
             updated = true;

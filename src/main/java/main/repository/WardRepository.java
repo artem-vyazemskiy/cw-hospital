@@ -14,6 +14,7 @@ import main.entity.Ward;
 @Repository
 public interface WardRepository extends CrudRepository<Ward, Long> {
 
+    boolean existsByName(String name);
     Optional<Ward> findByName(String name);
 
     @Query("select distinct ward from Person person join person.ward ward join person.diagnosis diagnosis " +

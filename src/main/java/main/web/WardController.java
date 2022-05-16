@@ -3,6 +3,7 @@ package main.web;
 import main.entity.Ward;
 import main.entity.request.WardRequest;
 import main.exception.WardAlreadyExistsException;
+import main.exception.WardIncorrectMaxCountException;
 import main.exception.WardIsUsedException;
 import main.exception.WardNotExistsException;
 import main.service.WardService;
@@ -128,11 +129,14 @@ public class WardController {
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable("id") long id, WardRequest wardRequest) {
+    public String update(@PathVariable("id") long id, WardRequest wardRequest, Model model) {
         try {
             wardService.updateWard(id, wardRequest);
         } catch (WardNotExistsException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (WardAlreadyExistsException | WardIncorrectMaxCountException e) {
+            model.addAttribute("message", e.getMessage());
+            return "message";
         }
         return "redirect:/wards/" + id;
     }
