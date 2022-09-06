@@ -9,17 +9,17 @@ nav ul {
 }
 nav li {
     display: inline-block;
-    width: 110px;
+    width: 120px;
     margin: 5px;
     background-color: lightgray;
     border: 1px solid black;
-    text-align: center;
 }
 nav a {
     display: block;
-    margin: 5px;
     color: black;
+    padding: 6px;
     text-decoration: none;
+    text-align: center;
 }
 nav li:hover {
     background-color: lavender;
